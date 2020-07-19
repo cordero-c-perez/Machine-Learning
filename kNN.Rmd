@@ -1,0 +1,154 @@
+---
+title: <center>Nearest Neighbor Classification (kNN)</center>
+author: <center>C. Perez</center>
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Project & Data Description
+
+This code applies the kNN algorithm to a speech recognition dataset offered in the UCI machine learning repository with the aim to correctly classify the language each set of features belongs to. The dataset is made up of 329 observations with 16 numerical variables, and because the variables are all Mel-frequency cepstral coefficients (**mfcc**), scaling is not necessary prior to implementation.
+
+## Implementation 
+
+It is important that the variable to be classified is a factor and that conversion takes place after loading the data as can be seen in the following code:
+
+```{r, include = TRUE, echo = TRUE, message = FALSE, comment = "", warning = FALSE}
+# Machine Learning - kNN Method
+
+# clear global environment
+rm(list = ls(all.names = TRUE))
+
+
+# libraries
+library(tidyverse)
+library(caret)
+library(class)
+library(gmodels)
+library(knitr)
+
+
+# import data
+kdata <- read_csv("~/Documents/R/RProjects-Public/Machine-Learning-Data/accent-mfcc-data-1.csv",
+                  col_names = TRUE)
+kdata$language <- as.factor(kdata$language) # convert to factor
+
+
+# include comment below if data requires scaling
+#kdata <- kdata%>% mutate_at(c(2:length(kdata)), ~(scale(.) %>% as.vector))
+
+```
+
+The kNN algorithm essentially conducts proximity matches to label new points in P-dimensional space, where "P" is the number of features present in the dataset. The importance of "k" is such that k determines the number of neighbors to consider in labeling unseen data points.The default value of k is 1, however really small values of k can lead to overfitting while really large values of k can lead to the opposite. This begs the question...how do I identify the "best" k?
+
+In my research I have found that the best k is subjective and problem specific. For example, when using kNN to confirm a medical diagnosis sometimes a k value that produces higher accuracy can yield false negatives which is of greater concern here than say false negatives for customer segmentation. This means that the "best" k is actually a value that both maximizes accuracy and adheres to the constraints of the desired outcome. For the purpose of this exercise, maximizing accuracy is of the greatest concern and hence the question becomes: how do I choose the value of k that will yield better accuracy?
+
+Some sources suggest that the square root of p serves as a good estimate for k. Seeing as this suggests a value of approx. 17, the following code tests k values ranging from 1 to 17. 100 iterations are run under different 80/20 data partitions and the measure of accuracy is stored for each iteration under each value of k tested. All 100 iterations are then used to create a data frame in which the last column shows the index of the highest accuracy achieved for that iteration (observation). The goal of this is to get an idea, from a statistical perspective, which value of k tends to produce better accuracy.
+
+```{r, include = TRUE, echo = TRUE, message = FALSE, comment = "", warning = FALSE}
+
+# declare variable for loops
+iterations <- c()
+indices_list <- list()
+mean_vec_list <- list()
+
+
+for (i in 1:100){
+  
+  indices_list[[i]] <- as.vector(createDataPartition(kdata$language, 
+                                                     times = 1, p = .80, list = FALSE))
+  indices_vec <- as.vector(indices_list[[i]])
+
+  train <- kdata[indices_vec,]
+  test <- kdata[-indices_vec,]
+  
+  mean_vec <- c()
+
+  for (k in 1:17){
+  
+    predictions <- knn(train = train[-1], test = test[-1], cl = train$language, k = k)
+
+    mean_vec[k] <- mean(predictions == test$language)
+  
+  }
+  
+  mean_vec_list[[i]] <- mean_vec
+  
+}
+
+best_k <- c()
+
+for(i in 1:length(mean_vec_list)){
+  
+  best_k[i] <- which.max(mean_vec_list[[i]])
+  
+}
+
+```
+
+The data frame is as follows:
+
+```{r, include = TRUE, echo = TRUE, message = FALSE, comment = "", warning = FALSE}
+# isolate best k via summary statistics
+df <- data.frame()
+
+for (i in 1:100){
+  
+  df <- rbind(df,mean_vec_list[[i]])
+  
+}
+
+colnames(df) <- c(1:17) # rename column vectors to value of K
+df <- df %>% mutate(`k (most accurate)` = best_k)
+
+kable(df[1:5,c(1:7,18)], caption = "Full Size: 100 x 18")
+```
+
+The last column shows the value of k that achieved the highest accuracy for the corresponding iteration. 
+By creating the following plot over the 100 iterations, a rough likelihood that a specific k value will produce the greatest accuracy for a random data partition can be identified:
+
+```{r, echo = TRUE, message = FALSE, comment = "", warning = FALSE,, fig.dim = c(8,4)}
+
+plot(table(best_k), main = "100 iterations of 80% data partition",
+     xlab = "k", ylab = "Count (Max Accuracy)")
+```
+
+By viewing the box plot for each k value over the 100 iterations, the distribution of accuracy can be compared across k values. This allows me to select k with some level of certainty that it can, and also has the highest likelihood of, producing the greatest accuracy.
+
+```{r, include = TRUE, echo = TRUE, message = FALSE, comment = "", warning = FALSE}
+
+boxplot(df[,1:17], main = "Distribution of Accuracy",
+        xlab = "k", ylab = "Accuracy")
+```
+
+By viewing the distribution of accuracy, the clear competitors are 1,5, and 7. Odd numbers reduce the possibility of a tie vote among neighbors and as such are better suited for k. I chose k=5 as it is better in my opinion to not have 1 neighbor with 100% voting power, and by reducing it to 20% allows for a reasonable voting process in order to classify. This is at the expense of the negligible difference in the minimums as seen from the box-plot. Had these minimums differed substantially, I might be inclined to reduce/increase the value of k.
+
+```{r, include = TRUE, echo = TRUE, message = FALSE, comment = "", warning = FALSE}
+
+# choose k = 5
+
+indices <- as.vector(createDataPartition(kdata$language,times = 1, p = .80, list = FALSE))
+
+train <- kdata[indices,]
+test <- kdata[-indices,]
+
+predictions <- knn(train = train[-1], test = test[-1], cl = train$language, k = 5)
+
+mean(predictions == test$language)
+```
+
+The following table, while originally intended to display chi-square metrics for correlation of nominal features, provides metrics on how well the classification performed for the given test set.
+
+```{r, include = TRUE, echo = TRUE, message = FALSE, comment = "", warning = FALSE}
+
+CrossTable(x = predictions, y = test$language, prop.chisq = FALSE)
+
+```
+
+## Conclusion
+
+The top value along the diagonal of the above table shows the percentage of accuracy in correctly classifying each language based on the k value chosen. Here it was easy to try to identify a statistical of way of coming to a good choice for k, however thist strategy needs to be modified for larger datasets as it will become time consuming and is not practical for applications that require quick classification, such as sign recognition in autonomous vehicles.
+

@@ -58,14 +58,38 @@ for(i in 1:length(mean_vec_list)){
 
 plot(table(best_k), main = "100 iterations of 80% data partition")
 
-# choose k = 7 as value
+# isolate best k via summary statistics
+df <- data.frame()
+
+for (i in 1:100){
+  
+  df <- rbind(df,mean_vec_list[[i]])
+  
+}
+
+colnames(df) <- c(1:17) # rename column vectors to value of K
+df <- df %>% mutate(index_value = best_k)
+
+score <- c()
+
+for (i in 1:100){
+  
+  score[i] <- df[i,df$index_value[i]]
+  
+}
+
+df$score = score
+
+boxplot(score ~ index_value, data = df)
+
+# choose k = 5 as value
 
 indices <- as.vector(createDataPartition(kdata$language,times = 1, p = .80, list = FALSE))
 
 train <- kdata[indices,]
 test <- kdata[-indices,]
 
-predictions <- knn(train = train[-1], test = test[-1], cl = train$language, k = 7)
+predictions <- knn(train = train[-1], test = test[-1], cl = train$language, k = 5)
 
 mean(predictions == test$language)
 
