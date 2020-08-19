@@ -70,17 +70,8 @@ for (i in 1:100){
 colnames(df) <- c(1:17) # rename column vectors to value of K
 df <- df %>% mutate(index_value = best_k)
 
-score <- c()
+# boxplot
 
-for (i in 1:100){
-  
-  score[i] <- df[i,df$index_value[i]]
-  
-}
-
-df$score = score
-
-boxplot(score ~ index_value, data = df)
 
 # choose k = 5 as value
 
