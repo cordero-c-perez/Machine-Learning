@@ -9,11 +9,18 @@ rm(list = ls(all.names = TRUE))
 library(naivebayes)
 library(tidyverse)
 library(lubridate)
+library(rgdal)
 
 
 # import data
 nb_data <- read_csv("~/Documents/R/RProjects-Public/Machine-Learning-Data/NYPD_Complaint_Data_Historic.csv",
                     col_names = TRUE)
+ytd_data <- read_csv("~/Documents/R/RProjects-Public/Machine-Learning-Data/NYPD_Complaint_Data_YTD.csv",
+                     col_names = TRUE) %>% select(c(1:35))
+
+nb_data <- as.data.frame(rbind(nb_data,ytd_data))
+
+my_spdf <- readOGR("~/Documents/R/RProjects-Public/Machine-Learning-Data/Police Precincts.geojson")
 
 # take key columns for naive_bayes analysis: date (month, year), time, law_ct_code, borough,
 nb_data <- nb_data %>% select(c(2,3,6,9,11:14,))
@@ -99,24 +106,28 @@ write_csv(nb_data,"~/Documents/R/RProjects-Public/Machine-Learning-Data/cleaned_
 ################################### START OF NAIVE BAYES ###############################################
 
 # restrict the timeframe
-nb_data_list <- list(c(1:5))
+nb_data_list <- list(c(1:6))
 nb_data_list[[1]] <- nb_data %>% filter(Date >= "2015-01-01" & Date <= "2015-12-31") %>% droplevels()
 nb_data_list[[2]] <- nb_data %>% filter(Date >= "2016-01-01" & Date <= "2016-12-31") %>% droplevels()
 nb_data_list[[3]] <- nb_data %>% filter(Date >= "2017-01-01" & Date <= "2017-12-31") %>% droplevels()
 nb_data_list[[4]] <- nb_data %>% filter(Date >= "2018-01-01" & Date <= "2018-12-31") %>% droplevels()
 nb_data_list[[5]] <- nb_data %>% filter(Date >= "2019-01-01" & Date <= "2019-12-31") %>% droplevels()
+nb_data_list[[6]] <- nb_data %>% filter(Date >= "2020-01-01" & Date <= "2020-12-31") %>% droplevels()
 
 # build model for each year probabilities
 # Run the naive bayes model: Crime Category ~ 
-nb_models_list <- list(c(1:5))
+nb_models_list <- list(c(1:6))
 
-for (i in 1:5){
+for (i in 1:6){
 nb_models_list[[i]] <- naive_bayes(formula = `Offense Description` ~ Precinct+Month+Time, 
                               data = nb_data_list[[i]], laplace = 1)
 }
 
+# saved data files for shiny app
 saveRDS(nb_models_list, file = "datamodels.rds")
 saveRDS(nb_data[,3:11], file = "nbdata.rds")
+saveRDS(my_spdf, file = "spdf.rds")
+
 
 prior_probs <- c()
 for (i in 1:5){
@@ -146,12 +157,19 @@ prior_probs <- gather(data = prior_probs, key = `Crime Category`, value = "Proba
 
 # construct test data frame
 
-test_df <- nb_data[23000:23004,c(3,10:11)]
+test_df <- nb_data[23000,c(3,10:11)]
 colnames(test_df) <- c("Precinct", "Month", "Time")
 
 
 # Make prediction given NB model
-predict(nb_models_list[[1]], newdata =  test_df, type = "prob")
+output <- predict(nb_models_list[[3]], newdata =  test_df, type = "prob")
+
+tester <- as.data.frame(cbind(dimnames(output)[[2]],output[1,]))
+rownames(tester) <- NULL
+names(tester) <- c("Offense Description", "Probability")
+tester$Probability <- as.numeric(tester$Probability)
+tester <- tester %>% arrange(desc(Probability))
+
 
 nb_multi_model
 
