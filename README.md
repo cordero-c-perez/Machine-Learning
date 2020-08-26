@@ -27,12 +27,15 @@ compatibility.
 Viewable output of kNN.rmd file. This projects applies kNN
 classification to speech recognition data and aims to identify the “best
 k” given the data present. Data used for this project can be found
-[here](https://archive.ics.uci.edu/ml/datasets/Speaker+Accent+Recognition)
+[here](https://archive.ics.uci.edu/ml/datasets/Speaker+Accent+Recognition).
 
 #### naive\_bayes.r
 
 A script file containing the code used to create the models for the NYC
-Crime Odds Application.
+Crime Odds Application. Data used for this project can be found
+[here](https://data.cityofnewyork.us/Public-Safety/NYPD-Complaint-Data-Historic/qgea-i56i)
+and
+[here](https://data.cityofnewyork.us/Public-Safety/NYPD-Complaint-Data-Current-Year-To-Date-/5uac-w243).
 
 #### .RData files
 
