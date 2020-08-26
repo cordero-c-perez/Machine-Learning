@@ -29,6 +29,15 @@ classification to speech recognition data and aims to identify the “best
 k” given the data present. Data used for this project can be found
 [here](https://archive.ics.uci.edu/ml/datasets/Speaker+Accent+Recognition)
 
+#### naive\_bayes.r
+
+A script file containing the code used to create the models for the NYC
+Crime Odds Application.
+
+#### .RData files
+
+Saved data for shiny applications used to increase application speed.
+
 #### README.rmd
 
 This file creates a README.md file for the repository.
