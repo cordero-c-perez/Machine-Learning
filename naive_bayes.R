@@ -140,20 +140,7 @@ prior_probs$Year <- as.factor(prior_probs$Year)
 prior_probs <- gather(data = prior_probs, key = `Crime Category`, value = "Probability",-Year)
 
 
-########################################## probabilities 
-
-
-
-
-
-
-
-
-
-
-
-
-
+########################################## Notes
 
 # construct test data frame
 
