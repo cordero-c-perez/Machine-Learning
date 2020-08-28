@@ -32,7 +32,7 @@ k” given the data present. Data used for this project can be found
 #### naive\_bayes.r
 
 A script file containing the code used to create the models for the NYC
-Crime Odds Application. Data used for this project can be found
+Crime Application. Data used for this project can be found
 [here](https://data.cityofnewyork.us/Public-Safety/NYPD-Complaint-Data-Historic/qgea-i56i)
 and
 [here](https://data.cityofnewyork.us/Public-Safety/NYPD-Complaint-Data-Current-Year-To-Date-/5uac-w243).
