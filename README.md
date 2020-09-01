@@ -29,6 +29,11 @@ classification to speech recognition data and aims to identify the “best
 k” given the data present. Data used for this project can be found
 [here](https://archive.ics.uci.edu/ml/datasets/Speaker+Accent+Recognition).
 
+#### naive\_bayes.r
+
+A naive bayes classification using text data: spam vs. no-spam
+prediction
+
 #### README.rmd
 
 This file creates a README.md file for the repository.
