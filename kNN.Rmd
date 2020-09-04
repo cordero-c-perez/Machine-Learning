@@ -124,6 +124,36 @@ boxplot(df[,1:17], main = "Distribution of Accuracy",
         xlab = "k", ylab = "Accuracy")
 ```
 
+Running a pairwise mean(median) comparison test, and adjusting for the p-value, we would be able to see that there is a significant difference in the level of accuracy achieved between k values. An easier way to identify this is to show the notched box-plot in which the confidence intervals do not overlap for some k-values. This indicates a statistical difference across median values. 
+
+```{r, include = TRUE, echo = TRUE, message = FALSE, comment = "", warning = FALSE}
+
+dist_df <- mean_vec_list[[1]]
+
+for (i in 2:100){
+  
+  dist_df <- as.data.frame(rbind(dist_df,mean_vec_list[[i]]))
+  
+} 
+
+rownames(dist_df) <- NULL
+
+summary(dist_df)
+
+# tidy data frame
+dist_df_tidy <- gather(data = dist_df, key = "K", value = "Accuracy")
+dist_df_tidy$K <- str_replace(dist_df_tidy$K, "V", "")
+dist_df_tidy$K <- factor(dist_df_tidy$K, ordered = TRUE, levels = c(1:17))
+
+ggplot(data = dist_df_tidy, mapping = aes(x = K, y = Accuracy))+
+  geom_boxplot(notch = TRUE, orientation = "x")+ # median
+  stat_summary(fun=mean, geom="point", shape=21, size=2, color = "darkgreen")+ # mean
+  scale_y_log10()+
+  labs(title = "Accuracy Comparison via Notched Boxplot")+
+  theme_linedraw()+
+  theme(plot.title = element_text(hjust = .5))
+```
+
 By viewing the distribution of accuracy, the clear competitors are 1,5, and 7. Odd numbers reduce the possibility of a tie vote among neighbors and as such are better suited for k. I chose k=5 as it is better in my opinion to not have 1 neighbor with 100% voting power, and by reducing it to 20% allows for a reasonable voting process in order to classify. This is at the expense of the negligible difference in the minimums as seen from the box-plot. Had these minimums differed substantially, I might be inclined to reduce/increase the value of k.
 
 ```{r, include = TRUE, echo = TRUE, message = FALSE, comment = "", warning = FALSE}

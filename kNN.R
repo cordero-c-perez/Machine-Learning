@@ -85,3 +85,40 @@ predictions <- knn(train = train[-1], test = test[-1], cl = train$language, k = 
 mean(predictions == test$language)
 
 CrossTable(x = predictions, y = test$language, prop.chisq = FALSE)
+
+# see the distribution of accuracy and conduct a statistical test
+
+# create the data frame from the mean_vec list and a boxplot (notched)
+
+dist_df <- mean_vec_list[[1]]
+
+for (i in 2:100){
+  
+  dist_df <- as.data.frame(rbind(dist_df,mean_vec_list[[i]]))
+  
+} 
+
+rownames(dist_df) <- NULL
+
+summary(dist_df)
+
+# tidy data frame
+dist_df_tidy <- gather(data = dist_df, key = "K", value = "Accuracy")
+dist_df_tidy$K <- str_replace(dist_df_tidy$K, "V", "")
+dist_df_tidy$K <- factor(dist_df_tidy$K, ordered = TRUE, levels = c(1:17))
+
+ggplot(data = dist_df_tidy, mapping = aes(x = K, y = Accuracy))+
+  geom_boxplot(notch = TRUE, orientation = "x")+
+  stat_summary(fun=mean, geom="point", shape=21, size=2, color = "darkgreen")+
+  scale_y_log10()+
+  labs(title = "Accuracy Comparison via Notched Boxplot")+
+  theme_linedraw()+
+  theme(plot.title = element_text(hjust = .5))
+
+
+
+
+
+
+
+
