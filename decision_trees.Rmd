@@ -1,0 +1,164 @@
+---
+title: <center>Decision Tree Classification - 4 Algorithms</center>
+author: <center>C. Perez</center>
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Project & Data Description
+
+This code applies 4 decision tree algorithms (**C5.0, OneR, rpart, and randomForest**) to a [diabetes dataset](https://archive.ics.uci.edu/ml/datasets/Early+stage+diabetes+risk+prediction+dataset.) offered in the UCI machine learning repository with the aim to correctly classify the presence of diabetes given the presence of related conditions. The goal is to then improve on the models generated given the business objective, NOT improve on overall accuracy, and compare. The reason being that the presence of false negatives in trying to predict the presence of a condition outweighs the overall accuracy of correct classification. The dataset is made up of 520 observations of 17 features.
+
+## EDA 
+
+This section explores the diabetes data to find proportions of the target variable (class), split the data into appropriate training and test sets, and verify the proportions of both sets are representative of the whole.
+
+```{r, include = TRUE, warning = FALSE, fig.align='center', comment="", message=FALSE}
+
+# libraries
+library(C50)
+library(gmodels)
+library(OneR)
+library(tidyverse)
+library(rJava)
+library(RWeka)
+library(rpart)
+library(rpart.plot)
+library(randomForest)
+
+# load data - 
+# https://archive.ics.uci.edu/ml/datasets/Early+stage+diabetes+risk+prediction+dataset.
+diabetes <- read.csv("~/Documents/R/RProjects-Public/Machine-Learning-Data/diabetes_data.csv", 
+                     header = TRUE, stringsAsFactors = TRUE)
+
+# cleaning
+names(diabetes) <- str_to_lower(str_replace_all(names(diabetes),"\\.","_"))
+
+
+# view the structure and get some proportions and info to start
+str(diabetes)
+sum(is.na(diabetes))
+table(diabetes$class)
+prop.table(table(diabetes$class)) # approx. 61% positive 38% negative
+
+
+# create some random samples (75/25 split)
+set.seed(1230)
+d_train_indices <- sample(nrow(diabetes), .75*nrow(diabetes))
+
+
+# create train and test set
+d_train <- diabetes[d_train_indices,]
+d_test <- diabetes[-d_train_indices,]
+
+
+# test the sample proportions to identify if it were a good split
+prop.table(table(d_train$class))
+prop.table(table(d_test$class))
+```
+
+## rpart
+
+The following code implements the rpart algorithm by building a model to accurately classify the *class* variable given the other 16 features present in the data. The model is inspected and viewed (rpart.plot package) and then used to classify (predict) the outcome of the test set.
+
+```{r, include = TRUE, warning = FALSE, fig.align='center', comment="",fig.dim=c(8,4)}
+# create the model
+rpart_model <- rpart(formula = class~., data = d_train, method = "class")
+
+# view model 
+# summary(rpart_model)
+
+# view plot of model
+rpart_model
+rpart.plot(rpart_model)
+
+#make a prediction
+rpart_predictions <- predict(rpart_model, d_test[,-17], type = "class")
+```
+
+The accuracy is important to inspect from multiple perspectives. The first accuracy check provides a score on the match between the test class and the predicted class, and it is fairly good around 88%. Sometimes this accuracy should be compared when the data only has a few entries for one of the target classes, (i.e Positive or Negative). The accuracy for each case is computed and it shows that there is value in having the model as the target variable is not mainly of one type and the resulting accuracy drastically improves as a resul to fhaving the prediction.
+
+###### This was known prior to by viewing the proportion of each class in the target variable. If a proportion is around 95+%, then the additonal accuracy should be checked. For the case where there is a fair split (i.e one target class not too dominant) then the first accuracy check is generally sufficient.
+
+```{r, include = TRUE, warning = FALSE, fig.align='center', comment=""}
+# get accuracy
+mean(rpart_predictions == d_test$class)
+
+# compare this to predicting every result positive or every result negative
+mean(d_test$class == "Positive")
+mean(d_test$class == "Negative")
+
+# cross tabulate to identify the types of errors and discuss
+CrossTable(d_test$class, rpart_predictions, prop.chisq = FALSE, prop.c = FALSE, 
+           prop.r = FALSE, dnn = c("Actual", "Predicted"))
+```
+
+Although the model was pretty accurate, there are a high number of false negatives, as can be seen in the cross-table above, which is dangerous. Improving this model would be reducing the likelihood of a false negative regardless of whether overall accuracy increase or decreases because it can be quite costly to misdiagnose someone this way. As shown below, adding a cost matrix to the rpart function allows for a penalty to be applied to producing false negatives opposed to producing false positives. 
+
+```{r, include = TRUE, warning = FALSE, fig.align='center', comment=""}
+
+# How to reduce the likelihood of a false negative?
+# make a prediction with a loss matrix penalizing false negatives
+rpart_model_improved <- rpart(formula = class~., data = d_train, method = "class",
+                              parms = list(loss=matrix(c(0,1,2,0), byrow=TRUE, nrow=2)))
+
+rpart_predictions_improved <- predict(rpart_model_improved, d_test[,-17], type = "class")
+
+# get new accuracy
+mean(rpart_predictions_improved == d_test$class)
+
+# cross tabulate to identify the types of errors and discuss
+CrossTable(d_test$class, rpart_predictions_improved, prop.chisq = FALSE, prop.c = FALSE, 
+           prop.r = FALSE, dnn = c("Actual", "Predicted"))
+
+```
+
+The amount of false negatives dropped by roughly 33% and overall accuracy actually increased. The improvement in this case is sufficient in that it reduced the costly errors, however the model can be further improved via trying to eliminate them entirely.
+
+
+## Random Forests
+
+The randomForest function essentially creates multiple trees using subsets of the data in order to aggregate class output and conducts a vote to choose the class for the target variable based on this vote. The number of features used is generally sqrt(p), so in this case 4. The same process was repeated for the random forest, excluding the secondary accuracy checks, and is provided below.
+
+```{r, include = TRUE, warning = FALSE, fig.align='center', comment="",fig.dim=c(8,4)}
+# create the model
+rf_model <- randomForest(class~., data = d_train)
+
+# inspect model and error plot of model
+rf_model
+plot(rf_model, main = str_to_title("error plot for random forest"))
+
+#make a prediction
+rf_predictions <- predict(rf_model, d_test[,-17], type = "class")
+
+# get accuracy
+mean(rf_predictions == d_test$class)
+
+#compare this to predicting every result positive or every result negative
+#mean(rf_predictions == "Positive")
+#mean(rf_predictions == "Negative")
+
+# cross tabulate to identify the types of errors and discuss
+CrossTable(d_test$class, rf_predictions, prop.chisq = FALSE, prop.c = FALSE, 
+           prop.r = FALSE, dnn = c("Actual", "Predicted"))
+```
+
+Although this model is very accurate, there are a few false negatives, as can be seen in the cross-table above, which is still dangerous. So the following makes use of the *cutoff* parameter to reduce the likelihood of false negatives. The results are very good and provides a better solution than the rpart function as we can successfully eliminate the false negatives.
+
+```{r, include = TRUE, warning = FALSE, fig.align='center', comment=""}
+# How to reduce the likelihood of a false negative?
+# make a prediction with a cutoff parameter base don ROC curve
+rf_model_improved <- randomForest(formula = class~., data = d_train, type = "class", 
+                                  cutoff = c(.80,.20))
+
+rf_predictions_improved <- predict(rf_model_improved, d_test[,-17], type = "class")
+
+# get new accuracy
+mean(rf_predictions_improved == d_test$class)
+
+# cross tabulate to identify the types of errors and discuss
+CrossTable(d_test$class, rf_predictions_improved, prop.chisq = FALSE, prop.c = FALSE, 
+           prop.r = FALSE, dnn = c("Actual", "Predicted"))
