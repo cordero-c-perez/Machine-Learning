@@ -31,7 +31,7 @@ library(randomForest)
 
 # load data - 
 # https://archive.ics.uci.edu/ml/datasets/Early+stage+diabetes+risk+prediction+dataset.
-diabetes <- read.csv("~/Documents/R/RProjects-Public/Machine-Learning-Data/diabetes_data.csv", 
+diabetes <- read.csv("~/Documents/Machine-Learning-Data/diabetes_data.csv", 
                      header = TRUE, stringsAsFactors = TRUE)
 
 # cleaning

@@ -12,7 +12,7 @@ library(randomForest)
 ################################### C5.0----
 
 # loan data
-credit_data <- read.csv("~/Documents/R/RProjects-Public/Machine-Learning-Data/credit.csv", 
+credit_data <- read.csv("~/Documents/Machine-Learning-Data/credit.csv", 
                         header = TRUE, stringsAsFactors = TRUE)
 
 # check the proportions of target variable possibilities

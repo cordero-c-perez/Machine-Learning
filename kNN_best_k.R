@@ -12,7 +12,7 @@ library(gmodels)
 
 
 # import data
-kdata <- read_csv("~/Documents/R/RProjects-Public/Machine-Learning-Data/accent-mfcc-data-1.csv", col_names = TRUE)
+kdata <- read_csv("~/Documents/Machine-Learning-Data/accent-mfcc-data-1.csv", col_names = TRUE)
 kdata$language <- as.factor(kdata$language)
 
 

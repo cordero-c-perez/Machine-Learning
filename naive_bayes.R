@@ -23,7 +23,7 @@ replacePunctuation <- function(vector){
 
 
 # load data----
-nb_data <- read_csv("~/Documents/R/RProjects-Public/Machine-Learning-Data/sms_spam.csv", col_names = TRUE)
+nb_data <- read_csv("~/Documents/Machine-Learning-Data/sms_spam.csv", col_names = TRUE)
 
 # recode as a factor
 nb_data$type <- as.factor(nb_data$type)
