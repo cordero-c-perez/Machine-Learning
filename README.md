@@ -30,7 +30,7 @@ of correct classification.Data used for this
 project can be found
 [here](https://archive.ics.uci.edu/ml/datasets/Early+stage+diabetes+risk+prediction+dataset).
 
-#### [clustering_HC_Kmeans_DBSCAN.pdf]()
+#### [clustering_HC_Kmeans_DBSCAN.pdf](https://github.com/cordero-c-perez/Machine-Learning/blob/master/clustering_HC_Kmeans_DBSCAN.pdf)
 
 This can be considered a supervised learning project with a commonly used dataset (iris) to
 explore distinctions between three techniques, **Hierarchical
