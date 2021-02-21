@@ -222,17 +222,26 @@ CrossTable(d_test$class, predictions_1r, prop.chisq = FALSE, prop.c = FALSE,
 
 
 # train a model
-credit_model <- C5.0(x = ctrain[,-17], y = ctrain$default, trials = 10) # set rules = TRUE for rule learner opposed to decision tree
-credit_model
+c5_model <- C5.0(x = d_train[,-17], y = d_train$class, trials = 100) # set rules = TRUE for rule learner opposed to decision tree
+c5_model
 
 
 # view tree decisions
-summary(credit_model)
+summary(c5_model)
+
+# view plots of subtrees in C5.0 model
+# for (i in 0:25){
+# plot(c5_model, subtree = i)
+# }
 
 
 # evaluate the model performance
-credit_predictions <- predict(object = credit_model, ctest[,-17])
+c5_predictions <- predict(c5_model, d_test[,-17])
 
-CrossTable(ctest$default,credit_predictions, prop.chisq = FALSE, prop.c = FALSE, prop.r = FALSE,
-           dnn = c("Actual", "Predicted"))
+# get new accuracy
+mean(d_test$class == c5_predictions)
+
+# cross tabulate results
+CrossTable(d_test$class,c5_predictions, prop.chisq = FALSE, prop.c = FALSE, 
+           prop.r = FALSE, dnn = c("Actual", "Predicted"))
 

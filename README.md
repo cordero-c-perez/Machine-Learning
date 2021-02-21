@@ -1,47 +1,27 @@
-Machine Learning Repository
-================
-C. Perez
+## ML Repo  
+###### Note: data is not provided in the repository. Links are available in the README.
+***
 
-## Repository Description
-
-This repository houses an ongoing series of projects, exploring Machine
-Learning methods via small projects. There will typically be three files
-for each project; one will contain the code (**.R**), another will be
+This repository houses an ongoing series of small projects exploring Machine
+Learning methods. There will typically be three files
+for each R project; one will contain pure code (**.R**), another will be
 markdown (**.Rmd**), and the last (**.pdf**) can be viewed directly in
-github. The (.pdf) file description includes the associated project
-description.  
+github. The pdf file description includes the associated project
+description. There will be one file (.ipynb) for python projects as notebooks can be viewed directly in github.
 
-## Description of Files
+***
 
-#### kNN.r
-
-A script file containing the code used in the “.rmd” file.
-
-#### kNN.rmd
-
-A markdown file with an output converted to “.pdf” for github viewer
-compatibility.
+## Files
+***
 
 #### kNN.pdf
 
 Viewable output of kNN.rmd file. This projects applies kNN
 classification to speech recognition data and aims to identify the “best
-k” given the data present. Data used for this project can be found
+k” via bootstrapping. Classification accuracy serves as the measure of 
+performance here and the data used for this project can be found
 [here](https://archive.ics.uci.edu/ml/datasets/Speaker+Accent+Recognition).
 
-#### naive\_bayes.r
-
-A naive bayes classification using text data: spam vs. no-spam
-prediction
-
-#### decision\_trees.r
-
-A script file containing the code used in the “.rmd” file.
-
-#### decision\_trees.rmd
-
-A markdown file with an output converted to “.pdf” for github viewer
-compatibility.
 
 #### decision\_trees.pdf
 
@@ -51,8 +31,9 @@ improve each method given a business objective. Data used for this
 project can be found
 [here](https://archive.ics.uci.edu/ml/datasets/Early+stage+diabetes+risk+prediction+dataset).
 
-#### README.rmd
 
-This file creates a README.md file for the repository.
+#### naive\_bayes.r
 
-###### Note: data is not provided in the repository. Links are available in the README.
+A naive bayes classification using text data: spam vs. no-spam
+prediction
+
