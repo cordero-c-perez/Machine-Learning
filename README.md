@@ -19,7 +19,6 @@ k” via manual cross-validation under 17 values of k. Overall classification ac
 performance here and the data used for this project can be found
 [here](https://archive.ics.uci.edu/ml/datasets/Speaker+Accent+Recognition).
 
-
 #### [C5.0_OneR_rPart_RandomForest.pdf](https://github.com/cordero-c-perez/Machine-Learning/blob/master/C5.0_OneR_rPart_RandomForest.pdf)
 
 This project applies 4 decision tree algorithms (C5.0, OneR, rpart, and randomForest) to a diabetes
@@ -31,6 +30,20 @@ of correct classification.Data used for this
 project can be found
 [here](https://archive.ics.uci.edu/ml/datasets/Early+stage+diabetes+risk+prediction+dataset).
 
+#### [clustering_HC_Kmeans_DBSCAN.pdf]()
+
+This can be considered a supervised learning project with a commonly used dataset (iris) to
+explore distinctions between three techniques, **Hierarchical
+Clustering**, **Kmeans** and **Density Based Spatial Cluster
+Applications w/ Noise (DBSCAN)**. Although this is not supervised
+learning in the traditional sense, this project explores applying three methods
+in a supervised setting as the data has the correct cluster
+classification available (species) to check the results against. This is
+important for identifying subtle nuances between methods and
+understanding the built-in assumptions of these functions. The Iris dataset is used as there are only
+quantitative variables present and thus removes the trouble of creating
+a proper distance or dissimilarity matrix for mixed data types (**explored
+in later projects with mixed data**). The real takeaway for this project is that in order to cluster effectively, the measurements chosen as features is far more important that the clustering algorithm itself.
 
 #### naive\_bayes.r
 
