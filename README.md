@@ -1,6 +1,5 @@
 ## ML Repo  
 ###### Note: data is not provided in the repository. Links are available in the README.
-***
 
 This repository houses an ongoing series of small projects exploring Machine
 Learning methods. There will typically be three files
@@ -9,10 +8,8 @@ markdown (**.Rmd**), and the last (**.pdf**) can be viewed directly in
 github. The pdf file description includes the associated project
 description. There will be one file (.ipynb) for python projects as notebooks can be viewed directly in github.
 
-***
 
 ## Files
-***
 
 #### kNN.pdf
 
