@@ -19,7 +19,7 @@ k” via manual cross-validation under 17 values of k. Overall classification ac
 performance here and the data used for this project can be found
 [here](https://archive.ics.uci.edu/ml/datasets/Speaker+Accent+Recognition).
 
-#### [kNN_stock_vs_tuned_.ipynb](https://github.com/cordero-c-perez/Machine-Learning/blob/master/kNN_best_k.pdf)
+#### [kNN_stock_vs_tuned_.ipynb](https://github.com/cordero-c-perez/Machine-Learning/blob/master/kNN_stock_vs_tuned.ipynb)
 
 This projects applies kNN classification to speech recognition data and aims to evalaute performance for the out of box model vs. a tuned model. Overall classification accuracy, precision, and recall, all serve as the measures of performance here and the data used for this project can be found [here](https://archive.ics.uci.edu/ml/datasets/Speaker+Accent+Recognition).
 
