@@ -6,7 +6,7 @@ Learning methods. There will typically be three files
 for each R project; one will contain pure code (**.R**), another will be
 markdown (**.Rmd**), and the last (**.pdf**) can be viewed directly in
 github. The pdf file description includes the associated project
-description. There will be one file (.ipynb) for python projects as notebooks can be viewed directly in github.
+description. There will be two files (.ipynb, .pdf) for python projects as .ipynb notebooks can be viewed directly in github but are not compatible with the mobile app.
 
 
 ## Files
@@ -19,7 +19,7 @@ k” via manual cross-validation under 17 values of k. Overall classification ac
 performance here and the data used for this project can be found
 [here](https://archive.ics.uci.edu/ml/datasets/Speaker+Accent+Recognition).
 
-#### [kNN_stock_vs_tuned_.ipynb](https://github.com/cordero-c-perez/Machine-Learning/blob/master/kNN_stock_vs_tuned.ipynb)
+#### [kNN_stock_vs_tuned_.ipynb ](https://github.com/cordero-c-perez/Machine-Learning/blob/master/kNN_stock_vs_tuned.ipynb)/[kNN_stock_vs_tuned_.pdf](https://github.com/cordero-c-perez/Machine-Learning/blob/master/kNN_stock_vs_tuned.pdf)
 
 This projects applies kNN classification to speech recognition data and aims to evalaute performance for the out of box model vs. a tuned model. Overall classification accuracy, precision, and recall, all serve as the measures of performance here and the data used for this project can be found [here](https://archive.ics.uci.edu/ml/datasets/Speaker+Accent+Recognition).
 
