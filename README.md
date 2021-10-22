@@ -1,11 +1,7 @@
 ## ML Repo  
 ###### Note: some data is not provided in the repository. Links are available in the README when the data is not included.
 
-This repository houses an ongoing series of small projects exploring Machine
-Learning models/implementations. There will typically be three files
-for each R project; one will contain pure code (**.R**), another will be
-r-markdown (**.Rmd**), and the last (**.pdf**) or (**.md**) can be viewed directly in
-github. There will be two files (.ipynb, .md) for python projects. The README file descriptions below include the link to the viewable file and a small description of the ML implementation.
+This repository houses an ongoing series of small projects exploring Machine Learning models/implementations. There will typically be three files for applications in R (**.r, .rmd, .md**), and two files for applications in Python (**.ipynb, .md**) The README file descriptions below include the link to the markdown file and a small description of the ML implementation.
 
 
 ## Files
@@ -34,7 +30,7 @@ project can be found
 
 #### [clustering_HC_Kmeans_DBSCAN.pdf](https://github.com/cordero-c-perez/Machine-Learning/blob/master/clustering_HC_Kmeans_DBSCAN.pdf)
 
-This can be considered a supervised learning application with a commonly used dataset (iris) to
+This can be considered a supervised learning application (R) with a commonly used dataset (iris) to
 explore distinctions between three techniques, **Hierarchical
 Clustering**, **Kmeans** and **Density Based Spatial Cluster
 Applications w/ Noise (DBSCAN)** in R. Although this is not supervised
@@ -49,5 +45,5 @@ in later projects with mixed data**). The real takeaway for this application is 
 
 #### [Basic Logistic Regression Application - Breast Cancer Dataset.md](https://github.com/cordero-c-perez/Machine-Learning/blob/master/Basic%20Logistic%20Regression%20Application%20-%20Breast%20Cancer%20Dataset.md)
 
-Applies Logistic Regression to the breast cancer dataset with the aim of identifying the presence of malignant tissue samples given the sample features. This model does very well achieving 98% recall and 100% precision. Here recall is probably more important from the business' perspective so an iteration which trades precision for recall would be better suited for business implementation.
+Applies Logistic Regression (Pyhton) to the breast cancer dataset with the aim of identifying the presence of malignant tissue samples given the sample features. This model does very well achieving 98% recall and 100% precision. Here recall is probably more important from the business' perspective so an iteration which trades precision for recall would be better suited for business implementation.
 
