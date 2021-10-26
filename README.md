@@ -45,5 +45,5 @@ in later projects with mixed data**). The real takeaway for this application is 
 
 #### [Basic Logistic Regression Application - Breast Cancer Dataset.md](https://github.com/cordero-c-perez/Machine-Learning/blob/master/Basic%20Logistic%20Regression%20Application%20-%20Breast%20Cancer%20Dataset.md)
 
-Applies Logistic Regression (Pyhton) to the breast cancer dataset with the aim of identifying the presence of malignant tissue samples given the sample features. This model does very well achieving 98% recall and 100% precision. Here recall is probably more important from the business' perspective so an iteration which trades precision for recall would be better suited for business implementation.
+Applies Logistic Regression (Python) to the breast cancer dataset with the aim of identifying the presence of malignant tissue samples given the sample features. This model does very well achieving 98% recall and 100% precision. Here recall is probably more important from the business' perspective so an iteration which trades precision for recall would be better suited for business implementation.
 
